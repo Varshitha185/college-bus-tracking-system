@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Driver — SAIT Bus Tracker</title>
+<link rel='stylesheet' href='assets/style.css'></head>
+<body>
+<header class='topbar'><div class='brand'>Driver Panel</div><a class='back' href='index.html'>◀ Home</a></header>
+<main class='container'><section class='card'>
+<h2>Driver Dashboard</h2><p class='muted'>View upcoming stops and pickup requests.</p>
+<div class='row'><select id='driverSelect' class='select' onchange='onDriverChange()'>
+<option value=''>-- Select Bus --</option><option value='BUS-01'>BUS-01</option><option value='BUS-02'>BUS-02</option>
+</select></div>
+<div id='driverCard' style='display:none;margin-top:16px;'>
+<h3>Stops ahead</h3><ol id='stopsList'></ol>
+<h3 style='margin-top:12px;'>Pickup Requests</h3><div id='requests' class='requests'></div>
+</div></section></main>
+<script>
+const stopsData={'BUS-01':['Yelahanka','Kogilu','Hebbal','Mekhri Circle','SAIT'],'BUS-02':['Kengeri','RR Nagar','Banashankari','SAIT']};
+const requestsSample={'BUS-01':[{'name':'Nisha','stop':'Kogilu','time':'10:15 AM'}],'BUS-02':[{'name':'Ritu','stop':'RR Nagar','time':'10:20 AM'}]};
+function onDriverChange(){const v=driverSelect.value;if(!v){driverCard.style.display='none';return;}
+driverCard.style.display='block';stopsList.innerHTML='';stopsData[v].forEach((s,i)=>{let li=document.createElement('li');li.textContent=s;if(i===2)li.className='current';stopsList.appendChild(li)});
+requests.innerHTML='';(requestsSample[v]||[]).forEach(r=>{let c=document.createElement('div');c.className='reqcard';
+c.innerHTML=`<strong>${r.name}</strong> • ${r.stop} • ${r.time} <button onclick="this.innerText='Accepted';this.disabled=true;">Accept</button>`;requests.appendChild(c)});
+}
+</script></body></html>

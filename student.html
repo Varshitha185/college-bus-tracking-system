@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Student — SAIT Bus Tracker</title>
+<link rel='stylesheet' href='assets/style.css'></head>
+<body>
+<header class='topbar'><div class='brand'>SAIT • Bus Tracker</div><a class='back' href='index.html'>◀ Home</a></header>
+
+<main class='container'><section class='card'>
+<h2>Track a Bus</h2><p class='muted'>Select the bus to view location & ETA.</p>
+
+<div class='row'><select id='busSelect' class='select' onchange='onBusChange()'>
+<option value=''>-- Select Bus --</option>
+<option value='BUS-01'>BUS-01</option>
+<option value='BUS-02'>BUS-02</option>
+</select></div>
+
+<div id='mapCard' class='mapcard' style='display:none;'>
+
+<div class='infoGrid'>
+<div><strong>Bus:</strong> <span id='infoBus'>-</span></div>
+<div class="mapBtnBox" style="margin-top:12px;">
+    <a id="mapsLink" class="btn btn-outline" href="#" target="_blank">
+        View Route on Google Maps
+    </a>
+</div>
+
+<div><strong>Driver:</strong> <span id='infoDriver'>-</span></div>
+<div><strong>Status:</strong> <span id='infoStatus'>-</span></div>
+<div><strong>ETA:</strong> <span id='infoETA'>-</span></div>
+</div>
+
+<div class='stopsBox'>
+ <h3>Route Stops</h3>
+ <ul id='stopsList'></ul>
+</div>
+
+<div class='contactBox'>
+ <h3>Contact Driver</h3>
+ <p><a id='callLink' class='btn btn-primary'>Call Driver</a>
+ <a id='waLink' class='btn btn-outline' target='_blank'>WhatsApp</a></p>
+</div>
+
+<div class='requestBox'>
+ <h3>Request an Extra Stop</h3>
+ <input id='reqName' class='select' placeholder='Your Name'>
+ <input id='reqStop' class='select' placeholder='Requested Stop'>
+ <input id='reqTime' type='time' class='select'>
+ <input id='reqDate' type='date' class='select'>
+ <button class='btn btn-primary' onclick='openModal()'>Submit Request</button>
+</div>
+
+</div></section></main>
+
+<div id='modal' class='modal'><div class='modal-content'>
+<h3>Request Sent ✔</h3><p>Your pickup request has been recorded.</p>
+<button class='btn btn-primary' onclick='closeModal()'>OK</button></div></div>
+
+<script>
+const data={'BUS-01':{driver:'Ramesh',tel:'+911234567890',wa:'https://wa.me/911234567890',eta:'10:25 AM'},
+'BUS-02':{driver:'Suresh',tel:'+911098765432',wa:'https://wa.me/911098765432',eta:'10:40 AM'}};
+
+const busStops={'BUS-01':['Yelahanka','Hebbal','RT Nagar','Mekhri Circle','SAIT'],
+'BUS-02':['Kengeri','RR Nagar','Banashankari','SAIT']};
+
+function onBusChange(){
+ let v=busSelect.value;
+ if(!v){mapCard.style.display='none';return;}
+ let o=data[v];
+ mapCard.style.display='block';
+ infoBus.innerText=v; infoDriver.innerText=o.driver;
+ infoStatus.innerText='On Time'; infoETA.innerText=o.eta;
+ 
+// --- Google Maps Route Links ---
+const routeLinks = {
+    "BUS-01":
+      "https://www.google.com/maps/dir/?api=1&origin=Yelahanka&destination=Sambhram+Institute+of+Technology&waypoints=Hebbal|RT+Nagar",
+    "BUS-02":
+      "https://www.google.com/maps/dir/?api=1&origin=Kengeri&destination=Sambhram+Institute+of+Technology&waypoints=RR+Nagar|Banashankari"
+};
+document.getElementById("mapsLink").href = routeLinks[v];
+
+callLink.href='tel:'+o.tel; waLink.href=o.wa;
+
+ let ul=document.getElementById('stopsList'); ul.innerHTML='';
+ busStops[v].forEach(s=>{let li=document.createElement('li'); li.textContent=s; ul.appendChild(li);});
+}
+
+function openModal(){modal.style.display='flex';}
+function closeModal(){modal.style.display='none';}
+</script>
+
+</body></html>
