@@ -15,4 +15,14 @@
 <a class='btn btn-outline' href='driver.html'>I'm a Driver</a>
 </div></div></div>
 <footer class='foot'>Sambhram Institute of Technology</footer>
-</main></body></html>
+</main>
+<script>
+fetch("http://localhost:3000/buses")
+  .then(res => res.json())
+  .then(data => {
+    alert("Backend connected! Check console");
+    console.log(data);
+  });
+</script>
+</body>
+</html>
